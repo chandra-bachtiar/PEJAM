@@ -115,7 +115,7 @@ class UserController extends Controller
 
     public function destroy($id): JsonResponse
     {
-        $user = User::where('role', 'user')->find($id);
+        $user = User::find($id);
         if (!$user) {
             return response()->json([
                 'status' => 'error',
