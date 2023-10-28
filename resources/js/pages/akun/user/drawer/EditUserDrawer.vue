@@ -1,8 +1,5 @@
 <script setup>
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
+import { requiredValidator } from '@validators'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -34,12 +31,17 @@ const isDialogUpdateVisible = ref(false)
 const isFormValid = ref(false)
 const isPasswordVisible = ref(false)
 const refForm = ref()
-const name = ref('')
-const email = ref('')
+const nis = ref(props.user.nis)
+const username = ref(props.user.username)
+const name = ref(props.user.nama)
+const sex = ref(props.user.jenis_kelamin)
+const major = ref(props.user.jurusan)
+const classs = ref(props.user.kelas)
+const role = ref(props.user.role)
+const status = ref(props.user.status)
 const password = ref('')
-const phoneNumber = ref('')
+const image = ref(null)
 const imageUser = ref(null)
-const image = ref('https://api.dicebear.com/6.x/adventurer-neutral/svg?seed=Felix')
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
@@ -79,12 +81,18 @@ const onSubmit = () => {
       const form = new FormData()
 
       form.append('_method', 'PUT')
-      form.append('name', name.value)
-      form.append('email', email.value)
-      form.append('password', password.value)
-      form.append('phone_number', phoneNumber.value)
-      form.append('image', imageUser.value)
       form.append('id', props.updateid)
+      form.append('nis', nis.value)
+      form.append('username', username.value)
+      form.append('nama', name.value)
+      form.append('jenis_kelamin', sex.value)
+      form.append('jurusan', major.value)
+      form.append('kelas', classs.value)
+      form.append('role', role.value)
+      form.append('status', status.value)
+      form.append('password', password.value)
+      form.append('image', imageUser.value)
+      form.append('is_active', true)
       emit('userData', form)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
@@ -105,7 +113,6 @@ const handleUploadFile = () => {
 
 const handleResetFile = () => {
   image.value = props.user.image
-
 }
 
 const handleFileChange = event => {
@@ -127,13 +134,32 @@ const handleDrawerModelValueUpdate = val => {
   emit('update:isDrawerOpen', val)
 }
 
+const sexList = [
+  {
+    title: 'Laki-laki',
+    value: 'L',
+  },
+  {
+    title: 'Perempuan',
+    value: 'P',
+  },
+]
+
+const roleList = ['Admin', 'User']
+const statusList = ['Murid', 'Guru', 'Warga Sekolah']
+
 watchEffect(() => {
   if(props.user) {
     console.log(props.user)
-    name.value = props.user.name
-    email.value = props.user.email
+    nis.value = props.user.nis
+    username.value = props.user.username
+    name.value = props.user.nama
+    sex.value = props.user.jenis_kelamin
+    major.value = props.user.jurusan
+    classs.value = props.user.kelas
+    role.value = props.user.role
+    status.value = props.user.status
     image.value = props.user.image
-    phoneNumber.value = props.user.phone_number
   }
 })
 </script>
@@ -217,6 +243,26 @@ watchEffect(() => {
                 </VRow>
               </VCol>
 
+              <!-- 👉 NIS -->
+              <VCol cols="12">
+                <AppTextField
+                  v-model="nis"
+                  :rules="[requiredValidator]"
+                  label="Nomor Induk Siswa"
+                  placeholder="Masukan Nomor Induk Siswa"
+                />
+              </VCol>
+
+              <!-- 👉 username -->
+              <VCol cols="12">
+                <AppTextField
+                  v-model="username"
+                  :rules="[requiredValidator]"
+                  label="Username"
+                  placeholder="Masukan Username"
+                />
+              </VCol>
+
               <!-- 👉 Nama Lengkap -->
               <VCol cols="12">
                 <AppTextField
@@ -227,57 +273,56 @@ watchEffect(() => {
                 />
               </VCol>
 
-              <!-- 👉 Email -->
+              <!-- Jenis Kelamin -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Alamat Email"
-                  placeholder="Masukan alamat email"
+                <AppSelect
+                  v-model="sex"
+                  :items="sexList"
+                  item-title="title"
+                  item-value="value"
+                  placehodler="Pilih Jenis Kelamin"
+                  label="Jenis Kelamin"
                 />
               </VCol>
 
-              <!-- 👉 Email -->
+              <!-- Jurusan -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="phoneNumber"
+                  v-model="major"
                   :rules="[requiredValidator]"
-                  label="Nomor Handphone"
-                  placeholder="Masukan nomor handphone"
-                  @keyup="handlePhoneNumber"
+                  label="Jurusan"
+                  placeholder="Masukan Nama Jurusan"
                 />
               </VCol>
 
-              <!-- 👉 Password -->
+              <!-- Kelas -->
               <VCol cols="12">
-                <VLabel>Kata Sandi</VLabel>
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="8"
-                  >
-                    <AppTextField
-                      v-model="password"
-                      :type="isPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                      placeholder="Masukan Kata Sandi"
-                      autocomplete="off"
-                      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="4"
-                    class="text-end"
-                  >
-                    <VBtn
-                      variant="tonal"
-                      @click="generatePassword"
-                    >
-                      Generate
-                    </VBtn>
-                  </VCol>
-                </VRow>
+                <AppTextField
+                  v-model="classs"
+                  :rules="[requiredValidator]"
+                  label="Kelas"
+                  placeholder="Masukan Kelas"
+                />
+              </VCol>
+
+              <!-- Jenis Role -->
+              <VCol cols="12">
+                <AppSelect
+                  v-model="role"
+                  :items="roleList"
+                  placehodler="Pilih Jenis Role"
+                  label="Pilih Role"
+                />
+              </VCol>
+
+              <!-- Jenis Status -->
+              <VCol cols="12">
+                <AppSelect
+                  v-model="status"
+                  :items="statusList"
+                  placehodler="Pilih Jenis Status"
+                  label="Pilih Status"
+                />
               </VCol>
 
 

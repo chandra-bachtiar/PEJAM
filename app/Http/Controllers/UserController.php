@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $params = request()->all();
         $search = isset($params['search']) ? $params['search'] : '';
-        $user = User::select('nis', 'username', 'nama', 'jenis_kelamin', 'jurusan', 'kelas', 'role', 'status', 'image')
+        $user = User::select('id', 'nis', 'username', 'nama', 'jenis_kelamin', 'jurusan', 'kelas', 'role', 'status', 'image')
             ->where(function ($query) use ($search) {
                 $query->where('nis', 'like', '%' . $search . '%')
                     ->orWhere('username', 'like', '%' . $search . '%')
@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function show($id): JsonResponse
     {
-        $user = User::where('role', 'user')->find($id);
+        $user = User::find($id);
         if (!$user) {
             return response()->json([
                 'status' => 'error',
@@ -79,7 +79,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id): JsonResponse
     {
-        $user = User::where('role', 'user')->find($id);
+        $user = User::find($id);
         if (!$user) {
             return response()->json([
                 'status' => 'error',
@@ -87,18 +87,21 @@ class UserController extends Controller
             ], 404);
         }
 
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->role = 'user';
-        $user->phone_number = $request->phone_number;
-        if ($request->password != null || $request->password != '') {
-            $user->password = bcrypt($request->password);
-        }
+        $user->nis = $request->nis;
+        $user->username = $request->username;
+        $user->nama = $request->nama;
+        $user->jenis_kelamin = $request->jenis_kelamin;
+        $user->jurusan = $request->jurusan;
+        $user->kelas = $request->kelas;
+        $user->role = $request->role;
+        $user->status = $request->status;
+        $user->is_active = $request->is_active;
 
         if ($request->hasFile('image')) {
-            $imageName = $user->id . '.' . $request->image->extension();
+            $imageName = time() . '.' . $request->image->extension();
             $image = $request->file('image');
             $image->move(storage_path('app/public/images/user'), $imageName);
+            $imageName = '/storage/images/user/' . $imageName;
             $user->image = $imageName;
         }
 

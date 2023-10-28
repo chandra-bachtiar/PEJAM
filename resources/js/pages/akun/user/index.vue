@@ -88,6 +88,7 @@ const isEditUserDrawerVisible = ref(false)
 
 const openDrawerUpdate = async id => {
   updateId.value = id
+  console.log(id)
 
   const user = await userListStore.fetchUser(id)
 
