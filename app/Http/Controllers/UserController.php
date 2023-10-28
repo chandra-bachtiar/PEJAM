@@ -12,13 +12,18 @@ class UserController extends Controller
     {
         $params = request()->all();
         $search = isset($params['search']) ? $params['search'] : '';
-        $user = User::select('id', 'name', 'email', 'image', 'created_by', 'created_at', 'phone_number')
-            ->where('role', 'user')
+        $user = User::select('nis', 'username', 'nama', 'jenis_kelamin', 'jurusan', 'kelas', 'role', 'status', 'image')
             ->where(function ($query) use ($search) {
-                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($search) . '%'])
-                    ->orWhereRaw('LOWER(email) LIKE ?', ['%' . strtolower($search) . '%'])
-                    ->orWhereRaw('LOWER(phone_number) LIKE ?', ['%' . strtolower($search) . '%']);
+                $query->where('nis', 'like', '%' . $search . '%')
+                    ->orWhere('username', 'like', '%' . $search . '%')
+                    ->orWhere('nama', 'like', '%' . $search . '%')
+                    ->orWhere('jenis_kelamin', 'like', '%' . $search . '%')
+                    ->orWhere('jurusan', 'like', '%' . $search . '%')
+                    ->orWhere('kelas', 'like', '%' . $search . '%')
+                    ->orWhere('role', 'like', '%' . $search . '%')
+                    ->orWhere('status', 'like', '%' . $search . '%');
             })
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
         return response()->json([
             'status' => 'success',

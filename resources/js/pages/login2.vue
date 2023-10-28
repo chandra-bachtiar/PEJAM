@@ -47,7 +47,12 @@ const login = () => {
       localStorage.setItem('tokenType', data.token_type)
       localStorage.setItem('userData', JSON.stringify(data.user))
 
-      router.push({ name: 'dashboard' })
+      if(data.user.role === 'Admin') {
+        router.push({ name: 'dashboard' })
+
+      } else if(data.user.role === 'User') {
+        router.push({ name: 'vote' })        
+      }
     })
     .catch(function (error) {
       console.log(error)

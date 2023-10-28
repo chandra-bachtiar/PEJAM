@@ -1,8 +1,5 @@
 <script setup>
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
+import { requiredValidator } from '@validators'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -23,9 +20,14 @@ const rules = [fileList => !fileList || !fileList.length || fileList[0].size < 1
 const isFormValid = ref(false)
 const isPasswordVisible = ref(false)
 const refForm = ref()
+const nis = ref('')
+const username = ref('')
 const name = ref('')
-const email = ref('')
-const phoneNumber = ref('')
+const sex = ref('L')
+const major = ref('')
+const classs = ref('')
+const role = ref('')
+const status = ref('')
 const password = ref('')
 const ProfileImage = ref(null)
 const imageUser = ref(null)
@@ -40,15 +42,6 @@ const closeNavigationDrawer = () => {
   })
 }
 
-const generatePassword = () => {
-  const length = 8
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  let retVal = ''
-  for (let i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n))
-  }
-  password.value = retVal
-}
 
 const handleFileChange = event => {
   const file = event.target.files[0]
@@ -57,21 +50,20 @@ const handleFileChange = event => {
   imageUser.value = file
 }
 
-const handlePhoneNumber = event => {
-  const value = event.target.value
-
-  phoneNumber.value = value.replace(/\D/g, '')
-}
-
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       const form = new FormData()
 
-      form.append('name', name.value)
-      form.append('email', email.value)
+      form.append('nis', nis.value)
+      form.append('username', username.value)
+      form.append('nama', name.value)
+      form.append('jenis_kelamin', sex.value)
+      form.append('jurusan', major.value)
+      form.append('kelas', classs.value)
+      form.append('role', role.value)
+      form.append('status', status.value)
       form.append('password', password.value)
-      form.append('phone_number', phoneNumber.value)
       form.append('image', imageUser.value)
       emit('userData', form)
       emit('update:isDrawerOpen', false)
@@ -82,6 +74,20 @@ const onSubmit = () => {
     }
   })
 }
+
+const sexList = [
+  {
+    title: 'Laki-laki',
+    value: 'L',
+  },
+  {
+    title: 'Perempuan',
+    value: 'P',
+  },
+]
+
+const roleList = ['Admin', 'User']
+const statusList = ['Murid', 'Guru', 'Warga Sekolah']
 
 const handleDrawerModelValueUpdate = val => {
   emit('update:isDrawerOpen', val)
@@ -130,6 +136,26 @@ onMounted(() => {
                 />
               </VCol>
 
+              <!-- 👉 NIS -->
+              <VCol cols="12">
+                <AppTextField
+                  v-model="nis"
+                  :rules="[requiredValidator]"
+                  label="Nomor Induk Siswa"
+                  placeholder="Masukan Nomor Induk Siswa"
+                />
+              </VCol>
+
+              <!-- 👉 username -->
+              <VCol cols="12">
+                <AppTextField
+                  v-model="username"
+                  :rules="[requiredValidator]"
+                  label="Username"
+                  placeholder="Masukan Username"
+                />
+              </VCol>
+
               <!-- 👉 Nama Lengkap -->
               <VCol cols="12">
                 <AppTextField
@@ -140,58 +166,70 @@ onMounted(() => {
                 />
               </VCol>
 
-              <!-- 👉 Email -->
+              <!-- Jenis Kelamin -->
               <VCol cols="12">
-                <AppTextField
-                  v-model="email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Alamat Email"
-                  placeholder="Masukan alamat email"
+                <AppSelect
+                  v-model="sex"
+                  :items="sexList"
+                  item-title="title"
+                  item-value="value"
+                  placehodler="Pilih Jenis Kelamin"
+                  label="Jenis Kelamin"
                 />
               </VCol>
 
-              <!-- 👉 Phone Number -->
+              <!-- Jurusan -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="phoneNumber"
+                  v-model="major"
                   :rules="[requiredValidator]"
-                  label="Nomor Handphone"
-                  placeholder="Masukan nomor handphone"
-                  @keyup="handlePhoneNumber"
+                  label="Jurusan"
+                  placeholder="Masukan Nama Jurusan"
+                />
+              </VCol>
+
+              <!-- Kelas -->
+              <VCol cols="12">
+                <AppTextField
+                  v-model="classs"
+                  :rules="[requiredValidator]"
+                  label="Kelas"
+                  placeholder="Masukan Kelas"
+                />
+              </VCol>
+
+              <!-- Jenis Role -->
+              <VCol cols="12">
+                <AppSelect
+                  v-model="role"
+                  :items="roleList"
+                  placehodler="Pilih Jenis Role"
+                  label="Pilih Role"
+                />
+              </VCol>
+
+              <!-- Jenis Status -->
+              <VCol cols="12">
+                <AppSelect
+                  v-model="status"
+                  :items="statusList"
+                  placehodler="Pilih Jenis Status"
+                  label="Pilih Status"
                 />
               </VCol>
 
               <!-- 👉 Password -->
               <VCol cols="12">
-                <VLabel>Kata Sandi</VLabel>
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="8"
-                  >
-                    <AppTextField
-                      v-model="password"
-                      :rules="[requiredValidator]"
-                      :type="isPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                      placeholder="Masukan Kata Sandi"
-                      autocomplete="off"
-                      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="4"
-                    class="text-end"
-                  >
-                    <VBtn
-                      variant="tonal"
-                      @click="generatePassword"
-                    >
-                      Generate
-                    </VBtn>
-                  </VCol>
-                </VRow>
+                <AppTextField
+                  v-model="password"
+                  :rules="[requiredValidator]"
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                  placeholder="Masukan Kata Sandi"
+                  autocomplete="off"
+                  label="Kata Sandi"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                />
               </VCol>
               <!-- 👉 Submit and Cancel -->
               <VCol cols="12">

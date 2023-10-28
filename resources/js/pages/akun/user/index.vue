@@ -3,7 +3,6 @@ import { paginationMeta } from '@/@fake-db/utils'
 import { useUserListStore } from '@/ListStore/useUserListStore'
 import { avatarText } from '@core/utils/formatters'
 import { themeConfig } from '@themeConfig'
-import moment from 'moment'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
 import AddNewUserDrawer from './drawer/AddNewUserDrawer.vue'
 import EditUserDrawer from './drawer/EditUserDrawer.vue'
@@ -42,20 +41,24 @@ const options = ref({
 // Headers
 const headers = [
   {
-    title: 'ID ADMIN',
-    key: 'id',
+    title: 'NIS',
+    key: 'nis',
   },
   {
-    title: 'ADMIN',
-    key: 'name',
+    title: 'NAMA',
+    key: 'nama',
   },
   {
-    title: 'No HP',
-    key: 'phone_number',
+    title: 'JENIS KELAMIN',
+    key: 'jenis_kelamin',
   },
   {
-    title: 'DIBUAT OLEH',
-    key: 'created_by',
+    title: 'KELAS/JURUSAN',
+    key: 'kelas',
+  },
+  {
+    title: 'ROLE/STATUS',
+    key: 'role',
   },
   {
     title: 'ACTIONS',
@@ -70,9 +73,9 @@ const fetchUsers = () => {
     search: searchQuery.value,
     options: options.value,
   }).then(response => {
-    users.value = response.data.user.data
-    totalPage.value = response.data.user.last_page
-    totalUsers.value = response.data.user.total
+    users.value = response?.data?.user.data
+    totalPage.value = response?.data?.user.last_page
+    totalUsers.value = response?.data?.user.total
   }).catch(error => {
     console.error(error)
   })
@@ -225,6 +228,17 @@ const deleteUser = () => {
             class="text-no-wrap"
             @update:options="options = $event"
           >
+            <!-- 👉 NIS -->
+            <template #item.nis="{ item }">
+              <div class="d-flex align-center">
+                <div class="d-flex flex-column">
+                  <h6 class="text-base">
+                    {{ item.raw.nis }}
+                  </h6>
+                </div>
+              </div>
+            </template>
+          
             <!-- 👉 ID -->
             <template #item.id="{ item }">
               <div class="d-flex align-center gap-4">
@@ -233,7 +247,7 @@ const deleteUser = () => {
             </template>
 
             <!-- User -->
-            <template #item.name="{ item }">
+            <template #item.nama="{ item }">
               <div class="d-flex align-center">
                 <VAvatar
                   size="34"
@@ -249,36 +263,43 @@ const deleteUser = () => {
 
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.name }}
+                    {{ item.raw.nama }}
                   </h6>
 
-                  <span class="text-sm text-medium-emphasis">{{ item.raw.email }}</span>
+                  <span class="text-sm text-medium-emphasis">{{ item.raw.username }}</span>
                 </div>
               </div>
             </template>
 
-            <!-- 👉 No HP -->
-            <template #item.phone_number="{ item }">
+            <!-- 👉 Jenis Kelamin -->
+            <template #item.jenis_kelamin="{ item }">
               <div class="d-flex align-center">
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.phone_number }}
+                    {{ item.raw.jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
                   </h6>
-
-                  <span class="text-sm text-medium-emphasis">Whatsapp</span>
                 </div>
               </div>
             </template>
 
-            <!-- 👉 Created By -->
-            <template #item.created_by="{ item }">
+            <!-- 👉 Kelas -->
+            <template #item.kelas="{ item }">
               <div class="d-flex align-center">
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.created_by }}
+                    {{ item.raw.kelas }} - {{ item.raw.jurusan }}
                   </h6>
+                </div>
+              </div>
+            </template>
 
-                  <span class="text-sm text-medium-emphasis">{{ moment(item.raw.created_at).format('DD-MM-YYYY HH:mm') }}</span>
+            <!-- 👉 Role -->
+            <template #item.role="{ item }">
+              <div class="d-flex align-center">
+                <div class="d-flex flex-column">
+                  <h6 class="text-base">
+                    {{ item.raw.role }} - {{ item.raw.status }}
+                  </h6>
                 </div>
               </div>
             </template>

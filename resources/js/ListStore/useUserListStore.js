@@ -4,13 +4,13 @@ import { defineStore } from 'pinia'
 export const useUserListStore = defineStore('UserListStore', {
   actions: {
     // 👉 Fetch users data
-    fetchUsers(params) { return axios.get('/api/account/user', { params }) },
+    fetchUsers(params) { return axios.get('/api/user', { params }) },
 
     // 👉 Add User
     addUser(userData) {
       return new Promise((resolve, reject) => {
         axios({
-          url: '/api/account/user',
+          url: '/api/user',
           method: 'POST',
           data: userData,
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -24,7 +24,7 @@ export const useUserListStore = defineStore('UserListStore', {
     // 👉 fetch single user
     fetchUser(id) {
       return new Promise((resolve, reject) => {
-        axios.get(`/api/account/user/${id}`).then(response => resolve(response.data.user)).catch(error => reject(error))
+        axios.get(`/api/user/${id}`).then(response => resolve(response.data.user)).catch(error => reject(error))
       })
     },
 
@@ -32,7 +32,7 @@ export const useUserListStore = defineStore('UserListStore', {
     updateUser(userData) {
       return new Promise((resolve, reject) => {
         axios({
-          url: `/api/account/user/${userData.get('id')}`,
+          url: `/api/user/${userData.get('id')}`,
           method: 'POST',
           data: userData,
           headers: { 'Content-Type': 'multipart/form-data' },
@@ -45,7 +45,7 @@ export const useUserListStore = defineStore('UserListStore', {
     // 👉 Delete User
     deleteUser(id) {
       return new Promise((resolve, reject) => {
-        axios.delete(`/api/account/user/${id}`).then(response => resolve(response)).catch(error => reject(error))
+        axios.delete(`/api/user/${id}`).then(response => resolve(response)).catch(error => reject(error))
       })
     },
   },

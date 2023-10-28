@@ -34,6 +34,17 @@ Route::group([
     Route::post('me', [AuthController::class, 'me']);
 });
 
+Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
+    # Mobile API
+    Route::get('/mobile', [UserController::class, 'getAll']);
+
+    Route::get('/', [UserController::class, 'index']);
+    Route::get('/{id}', [UserController::class, 'show']);
+    Route::post('/', [UserController::class, 'store']);
+    Route::put('/{id}', [UserController::class, 'update']);
+    Route::delete('/{id}', [UserController::class, 'destroy']);
+});
+
 Route::post('/test', function (Request $request) {
     return response()->json(['foo' => 'bar']);
 });

@@ -1,13 +1,53 @@
 <script setup>
-import { themeConfig } from "@themeConfig";
+import router from '@/router'
+import axios from '@axios'
+import { themeConfig } from "@themeConfig"
+import { VForm } from 'vuetify/components/VForm'
 
-const form = ref({
-  email: "",
-  password: "",
-  remember: false,
+document.title = `Login - ${themeConfig.app.title}`
+
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
+
+const form = reactive({
+  username: '',
+  password: '',
 })
 
+
 const isPasswordVisible = ref(false)
+const isLoginButtonDisabled = ref(false)
+
+const login = () => {
+  isLoginButtonDisabled.value = true
+  axios.post('api/auth/login', form)
+    .then(function (response) {
+      const { data } = response
+
+      console.log(data)
+      localStorage.setItem('accessToken', data.access_token)
+      localStorage.setItem('expiresIn', data.expires_in)
+      localStorage.setItem('tokenType', data.token_type)
+      localStorage.setItem('userData', JSON.stringify(data.user))
+      
+      if(data.user.role === 'Admin') {
+        router.push({ name: 'dashboard' })
+
+      } else if(data.user.role === 'User') {
+        router.push({ name: 'vote' })        
+      }
+    })
+    .catch(function (error) {
+      const data = error?.response?.data
+      const code = error?.response?.status
+
+      if(code === 401) {
+        toast.error(data?.errors.message)
+      }
+
+      isLoginButtonDisabled.value = false
+    })
+}
 </script>
 
 <template>
@@ -46,7 +86,7 @@ const isPasswordVisible = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm @submit.prevent="login">
             <VRow>
               <!-- email -->
               <VCol cols="12">
