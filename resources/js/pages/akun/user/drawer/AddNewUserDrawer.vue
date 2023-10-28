@@ -88,6 +88,7 @@ const sexList = [
 
 const roleList = ['Admin', 'User']
 const statusList = ['Murid', 'Guru', 'Warga Sekolah']
+const classsList = ['X', 'XI', 'XII']
 
 const handleDrawerModelValueUpdate = val => {
   emit('update:isDrawerOpen', val)
@@ -190,11 +191,11 @@ onMounted(() => {
 
               <!-- Kelas -->
               <VCol cols="12">
-                <AppTextField
+                <AppSelect
                   v-model="classs"
-                  :rules="[requiredValidator]"
-                  label="Kelas"
-                  placeholder="Masukan Kelas"
+                  :items="classsList"
+                  placehodler="Pilih Kelas"
+                  label="Pilih Kelas"
                 />
               </VCol>
 
