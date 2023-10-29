@@ -147,7 +147,7 @@ const sexList = [
 
 const roleList = ['Admin', 'User']
 const statusList = ['Murid', 'Guru', 'Warga Sekolah']
-const classsList = ['X', 'XI', 'XII']
+const classsList = ['X', 'XI', 'XII', 'XIII']
 
 watchEffect(() => {
   if(props.user) {

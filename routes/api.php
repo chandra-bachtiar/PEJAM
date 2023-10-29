@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'cadidate'], function () {
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'vote'], function () {
     Route::get('/', [VoteController::class, 'index']);
+    Route::get('/cadidate', [VoteController::class, 'indexVote']);
     Route::get('/check', [VoteController::class, 'checkVoteUser']);
     Route::get('/{id}', [VoteController::class, 'show']);
     Route::post('/', [VoteController::class, 'store']);

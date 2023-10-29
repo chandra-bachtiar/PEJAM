@@ -1,13 +1,6 @@
 <script setup>
-import {
-injectionKeyIsVerticalNavHovered,
-useLayouts,
-} from '@layouts'
-import {
-VerticalNavGroup,
-VerticalNavLink,
-VerticalNavSectionTitle,
-} from '@layouts/components'
+import { injectionKeyIsVerticalNavHovered, useLayouts } from '@layouts'
+import { VerticalNavGroup, VerticalNavLink, VerticalNavSectionTitle } from '@layouts/components'
 import { config } from '@layouts/config'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 

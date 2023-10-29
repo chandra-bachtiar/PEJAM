@@ -15,7 +15,7 @@ const kandidat = ref([])
 
 //fetch data from api/vote
 const fetchData = () => {
-  voteListStore.fetchVotes()
+  voteListStore.fetchCadidate()
     .then(response => {
       kandidat.value = response.data.cadidate
       console.log(kandidat.value)

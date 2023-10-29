@@ -19,6 +19,16 @@ class VoteController extends Controller
         ]);
     }
 
+    public function indexVote(): JsonResponse
+    {
+        $cadidate = Cadidate::all();
+
+        return response()->json([
+            'status' => 'success',
+            'cadidate' => $cadidate,
+        ]);
+    }
+
     public function publicVote(): JsonResponse
     {
         //return all candidate with vote count and percentage

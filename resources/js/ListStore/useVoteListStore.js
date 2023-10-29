@@ -6,6 +6,8 @@ export const useVoteListStore = defineStore('VoteListStore', {
     // 👉 Fetch users data
     fetchVotes(params) { return axios.get('/api/vote', { params }) },
 
+    fetchCadidate(params) { return axios.get('/api/vote/cadidate', { params }) },
+
     // 👉 check is already voted
     checkIsAlreadyVoted(params) { return axios.get('/api/vote/check', { params }) },
 

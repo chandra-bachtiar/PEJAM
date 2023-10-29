@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('jurusan');
-            $table->enum('kelas', ['X', 'XI', 'XII']);
+            $table->enum('kelas', ['X', 'XI', 'XII', 'XIII']);
             $table->enum('role', ['Admin', 'User'])->default('User');
             $table->enum('status', ['Murid', 'Guru', 'Warga Sekolah'])->default('Murid');
             $table->string('image')->nullable();
