@@ -62,6 +62,8 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'vote'], function () {
     Route::delete('/{id}', [VoteController::class, 'destroy']);
 });
 
+Route::get('/publicvote', [VoteController::class, 'publicVote']);
+
 Route::post('/test', function (Request $request) {
     return response()->json(['foo' => 'bar']);
 });

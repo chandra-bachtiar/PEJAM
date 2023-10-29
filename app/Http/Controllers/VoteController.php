@@ -19,6 +19,22 @@ class VoteController extends Controller
         ]);
     }
 
+    public function publicVote(): JsonResponse
+    {
+        //return all candidate with vote count and percentage
+        $cadidate = Cadidate::withCount('votes')->get();
+        $totalVote = Vote::count();
+
+        foreach ($cadidate as $key => $value) {
+            $cadidate[$key]['percentage'] = $value->votes_count / $totalVote * 100;
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'vote' => $cadidate,
+        ]);
+    }
+
     public function store(Request $request): JsonResponse
     {
         $request->validate([

@@ -22,7 +22,11 @@ router.beforeEach(async (to, from, next) => {
   const user = JSON.parse(localStorage.getItem('userData'))
 
   if (!isLoggedIn && toPath !== '/login') {
-    next({ path: '/login' })
+    if(toPath === '/register' || toPath === '/') {
+      next()
+    }  else {
+      next({ path: '/login' })
+    }
   } else if (isLoggedIn && toPath === '/login') {
     if (user.role === 'Admin') {
       next({ path: '/dashboard' })

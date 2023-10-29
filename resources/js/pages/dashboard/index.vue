@@ -1,25 +1,110 @@
-<template>
-  <div>
-    <VCard
-      class="mb-6"
-      title="Kick start your project 🚀"
-    >
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our <a
-          href="https://demos.pixinvent.com/vuexy-vuejs-admin-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a> to understand where to go from here and how to use our template.
-      </VCardText>
-    </VCard>
+<script setup>
+import axios from '@axios'
 
-    <VCard title="Want to integrate JWT? 🔒">
-      <VCardText>We carefully crafted JWT flow so you can implement JWT with ease and with minimum efforts.</VCardText>
-      <VCardText>Please read our  JWT Documentation to get more out of JWT authentication.</VCardText>
-    </VCard>
+const voteData = ref([])
+const totalVote = ref(0)
+
+//set interval everty 15 seconds to hit API /publicvote 
+const fetchData = () => {
+  axios.get('/api/publicvote')
+    .then(response => {
+      voteData.value = response.data.vote
+      totalVote.value = voteData.value.reduce((acc, curr) => acc + curr.votes_count, 0)
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+fetchData()
+
+setInterval(fetchData, 30000)
+</script>
+
+<template>
+  <div class="misc-wrapper pt-0 mt-0">
+    <div>
+      <!-- 👉 Title and subtitle -->
+      <VImg
+        src="/storage/logo/voting.png"
+        alt="image voting"
+        width="100"
+        height="100"
+        style="float: left;"
+        class=""
+      />
+      <VImg
+        src="/storage/logo/osis.png"
+        alt="image osis"
+        width="100"
+        height="100"
+        style="float: right;"
+        class=""
+      />
+      <div class="text-center mb-4 mx-10">
+        <h4 class="text-h3 font-weight-medium mb-1">
+          Hasil Pemilihan Sementara
+        </h4>
+        <p>Selamat datang di PEJAM (Pemilihan Jamblang) berikut hasil pemilihan OSIS sementara :</p>
+        <h3>Total Suara Masuk : {{ totalVote }} Suara</h3>
+      </div>
+    </div>
+
+    <!-- 👉 Image -->
+    <div
+      class="misc-avatar w-100 mt-10"
+      style="padding-left: 10rem; padding-right: 10rem;"
+    >
+      <VRow
+        align-content="center"
+        justify="center"
+      >
+        <VCol
+          v-for="vote in voteData"
+          :key="vote"
+          cols="12"
+          md="6"
+          lg="4"
+        >
+          <VCard class="text-center">
+            <VImg
+              :src="vote.image"
+              width="100%"
+              style="max-height: 20rem;"
+            />
+            <VCardText>
+              <h3 class="font-weight-bold text-h4">
+                {{ `${vote.ketua} dan ${vote.wakil}` }}
+              </h3>
+              <VDivider />
+              <p class="pt-2">
+                {{ vote.description }}
+              </p>
+            </VCardText>
+
+            <VCardText class="justify-center">
+              <h2 class="text-h1">
+                {{ vote.percentage }} %
+              </h2>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
+    </div>
   </div>
 </template>
+
+<style lang="scss">
+@use "@core-scss/template/pages/misc.scss";
+
+.links {
+  cursor: pointer;
+  color: blue
+}
+
+.misc-email-input {
+  margin-inline: auto;
+  max-inline-size: 21.875rem;
+  min-inline-size: 12.5rem;
+}
+</style>
