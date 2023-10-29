@@ -1,35 +1,28 @@
 <script setup>
 import { paginationMeta } from '@/@fake-db/utils'
-import { useTrainerListStore } from '@/ListStore/useTrainerListStore'
-import { avatarText } from '@core/utils/formatters'
+import { useCadidateListStore } from '@/ListStore/useCadidateListStore'
 import { themeConfig } from '@themeConfig'
-import moment from 'moment'
 import { VDataTableServer } from 'vuetify/labs/VDataTable'
-import AddNewTrainerDrawer from './drawer/AddNewTrainerDrawer.vue'
-import EditTrainerDrawer from './drawer/EditTrainerDrawer.vue'
+import AddNewCadidateDrawer from './drawer/AddNewCadidateDrawer.vue'
+import EditCadidateDrawer from './drawer/EditCadidateDrawer.vue'
 
 // 👉 Toasify
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 
-document.title = `Trainer - ${themeConfig.app.title}`
+document.title = `Kadidat - ${themeConfig.app.title}`
 
-const trainerListStore = useTrainerListStore()
+const cadidateListStore = useCadidateListStore()
 const searchQuery = ref('')
 const totalPage = ref(1)
-const totalTrainers = ref(0)
-const trainers = ref([])
+const totalCadidates = ref(0)
+const cadidates = ref([])
 
 const updateId = ref(0)
 const deleteId = ref(0)
-const seletectedTrainer = ref({})
-
+const seletectedCadidate = ref({})
 const isDialogDeleteOpen = ref(false)
-
-const errorFetching = ref({
-  status: false,
-  message: '',
-})
+const visiMisi = ref('')
 
 const options = ref({
   page: 1,
@@ -42,20 +35,24 @@ const options = ref({
 // Headers
 const headers = [
   {
-    title: 'ID ADMIN',
-    key: 'id',
+    title: 'KADIDAT ID',
+    key: 'kadidat_id',
   },
   {
-    title: 'ADMIN',
-    key: 'name',
+    title: 'NAMA KETUA',
+    key: 'ketua',
   },
   {
-    title: 'No HP',
-    key: 'phone_number',
+    title: 'NAMA WAKIL',
+    key: 'wakil',
   },
   {
-    title: 'DIBUAT OLEH',
-    key: 'created_by',
+    title: 'VISI MISI',
+    key: 'visimisi',
+  },
+  {
+    title: 'FOTO',
+    key: 'foto',
   },
   {
     title: 'ACTIONS',
@@ -64,40 +61,40 @@ const headers = [
   },
 ]
 
-// 👉 Fetching trainers
-const fetchTrainers = () => {
-  trainerListStore.fetchTrainers({
+// 👉 Fetching cadidates
+const fetchCadidates = () => {
+  cadidateListStore.fetchCadidates({
     search: searchQuery.value,
     options: options.value,
   }).then(response => {
-    trainers.value = response.data.trainer.data
-    totalPage.value = response.data.trainer.last_page
-    totalTrainers.value = response.data.trainer.total
+    cadidates.value = response?.data?.cadidate.data
+    totalPage.value = response?.data?.cadidate.last_page
+    totalCadidates.value = response?.data?.cadidate.total
   }).catch(error => {
     console.error(error)
   })
 }
 
-watchEffect(fetchTrainers)
+watchEffect(fetchCadidates)
 
-const isAddNewTrainerDrawerVisible = ref(false)
-const isEditTrainerDrawerVisible = ref(false)
+const isAddNewCadidateDrawerVisible = ref(false)
+const isEditCadidateDrawerVisible = ref(false)
+const isDialogViewVisible = ref(false)
 
 const openDrawerUpdate = async id => {
   updateId.value = id
+  console.log(id)
 
-  const trainer = await trainerListStore.fetchTrainer(id)
+  const cadidate = await cadidateListStore.fetchCadidate(id)
 
-  seletectedTrainer.value = trainer
-  isEditTrainerDrawerVisible.value = true
+  seletectedCadidate.value = cadidate
+  isEditCadidateDrawerVisible.value = true
 }
 
-const addNewTrainer = trainerData => {
-  console.log(trainerData)
-
-  const create = trainerListStore.addTrainer(trainerData)
+const addNewCadidate = cadidateData => {
+  const create = cadidateListStore.addCadidate(cadidateData)
     .then(res => {
-      fetchTrainers()
+      fetchCadidates()
     })
     .catch(error => {
       console.error(error)
@@ -105,8 +102,8 @@ const addNewTrainer = trainerData => {
 
   toast.promise(create, {
     loading: 'Menyimpan Data...',
-    success: 'Trainer berhasil ditambahkan',
-    error: 'Trainer gagal ditambahkan',
+    success: 'Kadidat berhasil ditambahkan',
+    error: 'Kadidat gagal ditambahkan',
   }, {
     position: toast.POSITION.TOP_RIGHT,
     success: {
@@ -119,9 +116,9 @@ const addNewTrainer = trainerData => {
   })
 }
 
-const updateTrainer = trainerData => {
-  const update = trainerListStore.updateTrainer(trainerData).then(res => {
-    fetchTrainers()
+const updateCadidate = cadidateData => {
+  const update = cadidateListStore.updateCadidate(cadidateData).then(res => {
+    fetchCadidates()
   })
     .catch(error => {
       console.error(error)
@@ -129,8 +126,8 @@ const updateTrainer = trainerData => {
 
   toast.promise(update, {
     loading: 'Menyimpan Data...',
-    success: 'Trainer berhasil diupdate',
-    error: 'Trainer gagal diupdate',
+    success: 'Kadidat berhasil diupdate',
+    error: 'Kadidat gagal diupdate',
   }, {
     position: toast.POSITION.TOP_RIGHT,
     success: {
@@ -148,17 +145,17 @@ const openModalDelete = id => {
   isDialogDeleteOpen.value = true
 }
 
-const deleteTrainer = () => {
-  const deleted = trainerListStore.deleteTrainer(deleteId.value).then(res => {
-    fetchTrainers()
+const deleteCadidate = () => {
+  const deleted = cadidateListStore.deleteCadidate(deleteId.value).then(res => {
+    fetchCadidates()
   }).catch(error => {
     console.error(error)
   })
 
   toast.promise(deleted, {
     loading: 'Menghapus Data...',
-    success: 'Trainer berhasil dihapus',
-    error: 'Trainer gagal dihapus',
+    success: 'Kadidat berhasil dihapus',
+    error: 'Kadidat gagal dihapus',
   }, {
     position: toast.POSITION.TOP_RIGHT,
     success: {
@@ -171,9 +168,16 @@ const deleteTrainer = () => {
   }).then(() => {
     isDialogDeleteOpen.value = false
   })
+  fetchCadidates()
+}
 
-  // refetch Trainer
-  fetchTrainers()
+const openImage = image => {
+  window.open(image, '_blank')
+}
+
+const openVisiMisi = description => {
+  visiMisi.value = description
+  isDialogViewVisible.value = true
 }
 </script>
 
@@ -185,7 +189,7 @@ const deleteTrainer = () => {
           <!-- 👉 Filters -->
           <VCardText>
             <VRow>
-              <!-- 👉 Search Trainer -->
+              <!-- 👉 Search Cadidate -->
               <VCol
                 cols="12"
                 sm="4"
@@ -202,12 +206,12 @@ const deleteTrainer = () => {
                 sm="4"
                 class="text-right"
               >
-                <!-- 👉 Add trainer button -->
+                <!-- 👉 Add cadidate button -->
                 <VBtn
                   prepend-icon="tabler-plus"
-                  @click="isAddNewTrainerDrawerVisible = true"
+                  @click="isAddNewCadidateDrawerVisible = true"
                 >
-                  Tambah Trainer
+                  Tambah Kadidat
                 </VBtn>
               </VCol>
             </VRow>
@@ -219,66 +223,69 @@ const deleteTrainer = () => {
           <VDataTableServer
             v-model:items-per-page="options.itemsPerPage"
             v-model:page="options.page"
-            :items="trainers"
-            :items-length="totalTrainers"
+            :items="cadidates"
+            :items-length="totalCadidates"
             :headers="headers"
             class="text-no-wrap"
             @update:options="options = $event"
           >
             <!-- 👉 ID -->
-            <template #item.id="{ item }">
-              <div class="d-flex align-center gap-4">
-                <span class="text-capitalize">ADM-{{ item.raw.id }}</span>
-              </div>
-            </template>
-
-            <!-- Trainer -->
-            <template #item.name="{ item }">
+            <template #item.kadidat_id="{ item }">
               <div class="d-flex align-center">
-                <VAvatar
-                  size="34"
-                  :variant="!item.raw.avatar ? 'tonal' : undefined"
-                  class="me-3"
-                >
-                  <VImg
-                    v-if="item.raw.image"
-                    :src="item.raw.image"
-                  />
-                  <span v-else>{{ avatarText(item.raw.name) }}</span>
-                </VAvatar>
-
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.name }}
+                    KID-{{ item.raw.id }}
                   </h6>
-
-                  <span class="text-sm text-medium-emphasis">{{ item.raw.email }}</span>
                 </div>
               </div>
             </template>
 
-            <!-- 👉 No HP -->
-            <template #item.phone_number="{ item }">
+            <!-- 👉 Ketua -->
+            <template #item.ketua="{ item }">
               <div class="d-flex align-center">
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.phone_number }}
+                    {{ item.raw.ketua }}
                   </h6>
-
-                  <span class="text-sm text-medium-emphasis">Whatsapp</span>
                 </div>
               </div>
             </template>
 
-            <!-- 👉 Created By -->
-            <template #item.created_by="{ item }">
+            <!-- 👉 Wakil -->
+            <template #item.wakil="{ item }">
               <div class="d-flex align-center">
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
-                    {{ item.raw.created_by }}
+                    {{ item.raw.wakil }}
                   </h6>
+                </div>
+              </div>
+            </template>
 
-                  <span class="text-sm text-medium-emphasis">{{ moment(item.raw.created_at).format('DD-MM-YYYY HH:mm') }}</span>
+            <!-- 👉 Wakil -->
+            <template #item.visimisi="{ item }">
+              <div class="d-flex align-center">
+                <div class="d-flex flex-column">
+                  <h6
+                    class="text-base links"
+                    @click="openVisiMisi(item.raw.description)"
+                  >
+                    Lihat Visi & Misi
+                  </h6>
+                </div>
+              </div>
+            </template>
+
+            <!-- 👉 Wakil -->
+            <template #item.foto="{ item }">
+              <div class="d-flex align-center">
+                <div class="d-flex flex-column">
+                  <h6
+                    class="text-base links"
+                    @click="openImage(item.raw.image)"
+                  >
+                    Lihat Foto
+                  </h6>
                 </div>
               </div>
             </template>
@@ -299,12 +306,12 @@ const deleteTrainer = () => {
               <VDivider />
               <div class="d-flex align-center justify-sm-space-between justify-center flex-wrap gap-3 pa-5 pt-3">
                 <p class="text-sm text-disabled mb-0">
-                  {{ paginationMeta(options, totalTrainers) }}
+                  {{ paginationMeta(options, totalCadidates) }}
                 </p>
 
                 <VPagination
                   v-model="options.page"
-                  :length="Math.ceil(totalTrainers / options.itemsPerPage)"
+                  :length="Math.ceil(totalCadidates / options.itemsPerPage)"
                   :total-visible="$vuetify.display.xs ? 1 : 6"
                 >
                   <template #prev="slotProps">
@@ -335,23 +342,23 @@ const deleteTrainer = () => {
           <!-- SECTION -->
         </VCard>
 
-        <!-- 👉 Add New Trainer -->
-        <AddNewTrainerDrawer
-          v-model:isDrawerOpen="isAddNewTrainerDrawerVisible"
-          @trainer-data="addNewTrainer"
+        <!-- 👉 Add New Cadidate -->
+        <AddNewCadidateDrawer
+          v-model:isDrawerOpen="isAddNewCadidateDrawerVisible"
+          @cadidate-data="addNewCadidate"
         />
 
-        <!-- 👉 Edit Trainer -->
-        <EditTrainerDrawer
-          v-model:isDrawerOpen="isEditTrainerDrawerVisible"
+        <!-- 👉 Edit Cadidate -->
+        <EditCadidateDrawer
+          v-model:isDrawerOpen="isEditCadidateDrawerVisible"
           :updateid="updateId"
-          :trainer="seletectedTrainer"
-          @trainer-data="updateTrainer"
+          :cadidate="seletectedCadidate"
+          @cadidate-data="updateCadidate"
         />
       </vcol>
     </vrow>
 
-    <!-- 👉 Delete Trainer Dialog -->
+    <!-- 👉 Delete cadidate Dialog -->
     <VDialog
       v-model="isDialogDeleteOpen"
       persistent
@@ -363,7 +370,7 @@ const deleteTrainer = () => {
       <!-- Dialog Content -->
       <VCard title="Hapus data">
         <VCardText>
-          Apakah anda yakin ingin menghapus data trainer tersebut?
+          Apakah anda yakin ingin menghapus data kadidat tersebut?
         </VCardText>
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
@@ -374,8 +381,29 @@ const deleteTrainer = () => {
           >
             Batal
           </VBtn>
-          <VBtn @click="deleteTrainer">
+          <VBtn @click="deleteCadidate">
             Ya, Hapus!
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <VDialog
+      v-model="isDialogViewVisible"
+      width="500"
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogViewVisible = !isDialogViewVisible" />
+
+      <!-- Dialog Content -->
+      <VCard title="Visi & Misi">
+        <VCardText>
+          {{ visiMisi }}
+        </VCardText>
+
+        <VCardText class="d-flex justify-end">
+          <VBtn @click="isDialogViewVisible = false">
+            Tutup
           </VBtn>
         </VCardText>
       </VCard>
@@ -384,7 +412,12 @@ const deleteTrainer = () => {
 </template>
 
 <style lang="scss">
-.app-trainer-search-filter {
+.links {
+  cursor: pointer;
+  color: blue;
+}
+
+.app-user-search-filter {
   inline-size: 31.6rem;
 }
 
@@ -392,7 +425,7 @@ const deleteTrainer = () => {
   text-transform: capitalize;
 }
 
-.trainer-list-name:not(:hover) {
+.user-list-name:not(:hover) {
   color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
 }
 </style>

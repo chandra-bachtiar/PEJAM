@@ -6,19 +6,14 @@ export default [
   },
   { heading: 'Akun' },
   {
-    title: 'Admin',
-    to: { name: 'akun-admin' },
-    icon: { icon: 'tabler-user-shield' },
-  },
-  {
-    title: 'Trainer',
-    to: { name: 'akun-trainer' },
-    icon: { icon: 'tabler-user-code' },
-  },
-  {
     title: 'User',
     to: { name: 'akun-user' },
     icon: { icon: 'tabler-users' },
+  },
+  {
+    title: 'Kadidat',
+    to: { name: 'akun-kadidat' },
+    icon: { icon: 'tabler-user-code' },
   },
   { heading: 'Kelas' },
   {

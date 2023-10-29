@@ -32,7 +32,6 @@ const password = ref('')
 const ProfileImage = ref(null)
 const imageUser = ref(null)
 
-
 // 👉 drawer close
 const closeNavigationDrawer = () => {
   emit('update:isDrawerOpen', false)
@@ -41,7 +40,6 @@ const closeNavigationDrawer = () => {
     refForm.value?.resetValidation()
   })
 }
-
 
 const handleFileChange = event => {
   const file = event.target.files[0]
@@ -93,9 +91,6 @@ const classsList = ['X', 'XI', 'XII']
 const handleDrawerModelValueUpdate = val => {
   emit('update:isDrawerOpen', val)
 }
-
-onMounted(() => {
-})
 </script>
 
 <template>

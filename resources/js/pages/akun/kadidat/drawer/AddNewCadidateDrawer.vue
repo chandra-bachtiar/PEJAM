@@ -1,8 +1,5 @@
 <script setup>
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
+import { requiredValidator } from '@validators'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -14,21 +11,19 @@ const props = defineProps({
 
 const emit = defineEmits([
   'update:isDrawerOpen',
-  'trainerData',
+  'cadidateData',
 ])
 
 
 const rules = [fileList => !fileList || !fileList.length || fileList[0].size < 1000000 || 'Foto Profil harus kurang dari 1 MB!']
 
 const isFormValid = ref(false)
-const isPasswordVisible = ref(false)
 const refForm = ref()
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const ProfileImage = ref(null)
-const imageTrainer = ref(null)
-
+const chairman = ref(null)
+const viceChairman = ref(null)
+const description = ref(null)
+const cadidateImage = ref(null)
+const image = ref(null)
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
@@ -39,21 +34,11 @@ const closeNavigationDrawer = () => {
   })
 }
 
-const generatePassword = () => {
-  const length = 8
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  let retVal = ''
-  for (let i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n))
-  }
-  password.value = retVal
-}
-
 const handleFileChange = event => {
   const file = event.target.files[0]
 
-  ProfileImage.value = file
-  imageTrainer.value = file
+  cadidateImage.value = file
+  image.value = file
 }
 
 const onSubmit = () => {
@@ -61,11 +46,11 @@ const onSubmit = () => {
     if (valid) {
       const form = new FormData()
 
-      form.append('name', name.value)
-      form.append('email', email.value)
-      form.append('password', password.value)
-      form.append('image', imageTrainer.value)
-      emit('trainerData', form)
+      form.append('ketua', chairman.value)
+      form.append('wakil', viceChairman.value)
+      form.append('description', description.value)
+      form.append('image', image.value)
+      emit('cadidateData', form)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
         refForm.value?.reset()
@@ -78,9 +63,6 @@ const onSubmit = () => {
 const handleDrawerModelValueUpdate = val => {
   emit('update:isDrawerOpen', val)
 }
-
-onMounted(() => {
-})
 </script>
 
 <template>
@@ -94,7 +76,7 @@ onMounted(() => {
   >
     <!-- 👉 Title -->
     <AppDrawerHeaderSection
-      title="Tambah Trainer"
+      title="Tambah Kadidat"
       class="ma-4"
       @cancel="closeNavigationDrawer"
     />
@@ -112,68 +94,44 @@ onMounted(() => {
               <!-- 👉 Foto Profil -->
               <VCol cols="12">
                 <VFileInput
-                  ref="ProfileImage"
+                  ref="cadidateImage"
                   :rules="rules"
-                  label="Foto Profil"
+                  label="Foto Kadidat"
                   accept="image/png, image/jpeg, image/bmp"
-                  placeholder="Foto Profil"
+                  placeholder="Foto Kadidat"
                   prepend-icon="tabler-camera"
                   @change="handleFileChange"
                 />
               </VCol>
 
-              <!-- 👉 Nama Lengkap -->
+              <!-- 👉 ketua -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="name"
+                  v-model="chairman"
                   :rules="[requiredValidator]"
-                  label="Nama Lengkap"
-                  placeholder="Masukan Nama Lengkap"
+                  label="Nama Ketua"
+                  placeholder="Masukan Nama Ketua"
                 />
               </VCol>
 
-              <!-- 👉 Email -->
+              <!-- 👉 wakil -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Alamat Email"
-                  placeholder="Masukan alamat email"
+                  v-model="viceChairman"
+                  :rules="[requiredValidator]"
+                  label="Nama Wakil"
+                  placeholder="Masukan Nama Wakil"
                 />
               </VCol>
 
-              <!-- 👉 Password -->
+              <!-- 👉 Deksripsi -->
               <VCol cols="12">
-                <VLabel>Kata Sandi</VLabel>
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="8"
-                  >
-                    <AppTextField
-                      v-model="password"
-                      :rules="[requiredValidator]"
-                      :type="isPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                      placeholder="Masukan Kata Sandi"
-                      autocomplete="off"
-                      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="4"
-                    class="text-end"
-                  >
-                    <VBtn
-                      variant="tonal"
-                      @click="generatePassword"
-                    >
-                      Generate
-                    </VBtn>
-                  </VCol>
-                </VRow>
+                <AppTextarea
+                  v-model="description"
+                  label="Visi & Misi"
+                />
               </VCol>
+
               <!-- 👉 Submit and Cancel -->
               <VCol cols="12">
                 <VBtn type="submit">

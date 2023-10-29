@@ -1,8 +1,5 @@
 <script setup>
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
+import { requiredValidator } from '@validators'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -14,7 +11,7 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  admin: {
+  cadidate: {
     type: Object,
     required: true,
   },
@@ -22,7 +19,7 @@ const props = defineProps({
 
 const emit = defineEmits([
   'update:isDrawerOpen',
-  'adminData',
+  'cadidateData',
 ])
 
 const rules = [fileList => !fileList || !fileList.length || fileList[0].size < 1000000 || 'Foto Profil harus kurang dari 1 MB!']
@@ -32,13 +29,12 @@ const isDialogUpdateVisible = ref(false)
 
 // 👉 Form
 const isFormValid = ref(false)
-const isPasswordVisible = ref(false)
 const refForm = ref()
-const name = ref('')
-const email = ref('')
-const password = ref('')
-const imageTrainer = ref(null)
-const image = ref('https://api.dicebear.com/6.x/adventurer-neutral/svg?seed=Felix')
+const chairman = ref(props.cadidate.ketua)
+const viceChairman = ref(props.cadidate.wakil)
+const description = ref(props.cadidate.description)
+const image = ref(props.cadidate.image)
+const imageCadidate = ref(null)
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
@@ -48,17 +44,6 @@ const closeNavigationDrawer = () => {
     refForm.value?.resetValidation()
   })
 }
-
-const generatePassword = () => {
-  const length = 8
-  const charset = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-  let retVal = ''
-  for (let i = 0, n = charset.length; i < length; ++i) {
-    retVal += charset.charAt(Math.floor(Math.random() * n))
-  }
-  password.value = retVal
-}
-
 
 const submitForm = () => {
   isDialogUpdateVisible.value = false
@@ -72,12 +57,12 @@ const onSubmit = () => {
       const form = new FormData()
 
       form.append('_method', 'PUT')
-      form.append('name', name.value)
-      form.append('email', email.value)
-      form.append('password', password.value)
-      form.append('image', imageTrainer.value)
       form.append('id', props.updateid)
-      emit('adminData', form)
+      form.append('ketua', chairman.value)
+      form.append('wakil', viceChairman.value)
+      form.append('description', description.value)
+      form.append('image', imageCadidate.value)
+      emit('cadidateData', form)
       emit('update:isDrawerOpen', false)
       nextTick(() => {
         refForm.value?.reset()
@@ -96,14 +81,13 @@ const handleUploadFile = () => {
 }
 
 const handleResetFile = () => {
-  image.value = props.admin.image
-
+  image.value = props.cadidate.image
 }
 
 const handleFileChange = event => {
   const file = event.target.files[0]
 
-  imageTrainer.value = file
+  imageCadidate.value = file
 
   //change preview image from ref image
   const reader = new FileReader()
@@ -120,11 +104,12 @@ const handleDrawerModelValueUpdate = val => {
 }
 
 watchEffect(() => {
-  if(props.admin) {
-    console.log(props.admin)
-    name.value = props.admin.name
-    email.value = props.admin.email
-    image.value = props.admin.image
+  if(props.cadidate) {
+    console.log(props.cadidate)
+    chairman.value = props.cadidate.ketua
+    viceChairman.value = props.cadidate.wakil
+    description.value = props.cadidate.description
+    image.value = props.cadidate.image
   }
 })
 </script>
@@ -140,7 +125,7 @@ watchEffect(() => {
   >
     <!-- 👉 Title -->
     <AppDrawerHeaderSection
-      title="Rubah Trainer"
+      title="Rubah Kadidat"
       class="ma-4"
       @cancel="closeNavigationDrawer"
     />
@@ -208,56 +193,33 @@ watchEffect(() => {
                 </VRow>
               </VCol>
 
-              <!-- 👉 Nama Lengkap -->
+              
+              <!-- 👉 ketua -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="name"
+                  v-model="chairman"
                   :rules="[requiredValidator]"
-                  label="Nama Lengkap"
-                  placeholder="Masukan Nama Lengkap"
+                  label="Nama Ketua"
+                  placeholder="Masukan Nama Ketua"
                 />
               </VCol>
 
-              <!-- 👉 Email -->
+              <!-- 👉 wakil -->
               <VCol cols="12">
                 <AppTextField
-                  v-model="email"
-                  :rules="[requiredValidator, emailValidator]"
-                  label="Alamat Email"
-                  placeholder="Masukan alamat email"
+                  v-model="viceChairman"
+                  :rules="[requiredValidator]"
+                  label="Nama Wakil"
+                  placeholder="Masukan Nama Wakil"
                 />
               </VCol>
 
-              <!-- 👉 Password -->
+              <!-- 👉 Deksripsi -->
               <VCol cols="12">
-                <VLabel>Kata Sandi</VLabel>
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="8"
-                  >
-                    <AppTextField
-                      v-model="password"
-                      :type="isPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
-                      placeholder="Masukan Kata Sandi"
-                      autocomplete="off"
-                      @click:append-inner="isPasswordVisible = !isPasswordVisible"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="4"
-                    class="text-end"
-                  >
-                    <VBtn
-                      variant="tonal"
-                      @click="generatePassword"
-                    >
-                      Generate
-                    </VBtn>
-                  </VCol>
-                </VRow>
+                <AppTextarea
+                  v-model="description"
+                  label="Visi & Misi"
+                />
               </VCol>
 
 
