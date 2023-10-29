@@ -1,16 +1,15 @@
 <script setup>
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { VNodeRenderer } from './VNodeRenderer'
 import {
-  injectionKeyIsVerticalNavHovered,
-  useLayouts,
+injectionKeyIsVerticalNavHovered,
+useLayouts,
 } from '@layouts'
 import {
-  VerticalNavGroup,
-  VerticalNavLink,
-  VerticalNavSectionTitle,
+VerticalNavGroup,
+VerticalNavLink,
+VerticalNavSectionTitle,
 } from '@layouts/components'
 import { config } from '@layouts/config'
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
   tag: {
@@ -94,7 +93,12 @@ const handleNavScroll = evt => {
           to="/"
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
         >
-          <VNodeRenderer :nodes="config.app.logo" />
+          <VImg
+            src="/storage/logo/voting.png"
+            alt="image voting"
+            width="30"
+            height="30"
+          />
 
           <Transition name="vertical-nav-app-title">
             <h1
