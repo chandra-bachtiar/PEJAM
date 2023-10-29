@@ -19,11 +19,16 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const toPath = to.path
   const isLoggedIn = await isUserLoggedIn()
+  const user = JSON.parse(localStorage.getItem('userData'))
 
   if (!isLoggedIn && toPath !== '/login') {
     next({ path: '/login' })
   } else if (isLoggedIn && toPath === '/login') {
-    next({ path: '/dashboard' })
+    if (user.role === 'Admin') {
+      next({ path: '/dashboard' })
+    } else {
+      next({ path: '/vote' })
+    }
   } else {
     next()
   }

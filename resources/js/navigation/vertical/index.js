@@ -15,20 +15,10 @@ export default [
     to: { name: 'akun-kadidat' },
     icon: { icon: 'tabler-user-code' },
   },
-  { heading: 'Kelas' },
+  { heading: 'Pemilihan' },
   {
-    title: 'Kategori Kelas',
-    to: { name: 'kelas-kategori' },
+    title: 'History',
+    to: { name: 'history' },
     icon: { icon: 'tabler-box-multiple' },
-  },
-  {
-    title: 'Daftar Kelas',
-    to: { name: 'kelas' },
-    icon: { icon: 'tabler-books' },
-  },
-  {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
   },
 ]

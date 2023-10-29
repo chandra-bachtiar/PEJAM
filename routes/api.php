@@ -1,16 +1,18 @@
 <?php
 
+use App\Models\Vote;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VoteController;
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\CadidateController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\MateriController;
 use App\Http\Controllers\TrainerController;
-use App\Http\Controllers\KategoriKelasController;
+use App\Http\Controllers\CadidateController;
 use App\Http\Controllers\MateriTextController;
+use App\Http\Controllers\KategoriKelasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +51,15 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'cadidate'], function () {
     Route::post('/', [CadidateController::class, 'store']);
     Route::put('/{id}', [CadidateController::class, 'update']);
     Route::delete('/{id}', [CadidateController::class, 'destroy']);
+});
+
+Route::group(['middleware' => 'auth:api', 'prefix' => 'vote'], function () {
+    Route::get('/', [VoteController::class, 'index']);
+    Route::get('/check', [VoteController::class, 'checkVoteUser']);
+    Route::get('/{id}', [VoteController::class, 'show']);
+    Route::post('/', [VoteController::class, 'store']);
+    Route::put('/{id}', [VoteController::class, 'update']);
+    Route::delete('/{id}', [VoteController::class, 'destroy']);
 });
 
 Route::post('/test', function (Request $request) {

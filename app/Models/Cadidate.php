@@ -16,4 +16,9 @@ class Cadidate extends Model
         'image',
         'description',
     ];
+
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
 }
