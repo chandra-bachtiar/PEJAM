@@ -5,7 +5,7 @@ const user = ref(JSON.parse(localStorage.getItem('userData')))
 
 //logout function post to api/auth/logout
 const logout = () => {
-  axios.post('api/auth/logout')
+  axios.post('/api/auth/logout')
     .then(function (response) {
       const { data } = response
 
