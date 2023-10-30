@@ -35,8 +35,14 @@ class VoteController extends Controller
         $cadidate = Cadidate::withCount('votes')->get();
         $totalVote = Vote::count();
 
-        foreach ($cadidate as $key => $value) {
-            $cadidate[$key]['percentage'] = $value->votes_count / $totalVote * 100;
+        if ($totalVote == 0) {
+            foreach ($cadidate as $key => $value) {
+                $cadidate[$key]['percentage'] = 0;
+            }
+        } else {
+            foreach ($cadidate as $key => $value) {
+                $cadidate[$key]['percentage'] = $value->votes_count / $totalVote * 100;
+            }
         }
 
         return response()->json([
