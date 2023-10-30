@@ -19,7 +19,7 @@ class EncryptUserPasswords extends Command
     public function handle()
     {
         $users = User::all();
-
+        //check user sudah di encrypt atau belum
         foreach ($users as $user) {
             if (password_needs_rehash($user->password, PASSWORD_BCRYPT)) {
                 $user->password = bcrypt($user->password);
