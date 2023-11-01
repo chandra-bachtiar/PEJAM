@@ -18,17 +18,13 @@ const searchQuery = ref('')
 const totalPage = ref(1)
 const totalUsers = ref(0)
 const users = ref([])
-
+const role = ref('Semua')
 const updateId = ref(0)
 const deleteId = ref(0)
 const seletectedUser = ref({})
+const isNotVoted = ref(false)
 
 const isDialogDeleteOpen = ref(false)
-
-const errorFetching = ref({
-  status: false,
-  message: '',
-})
 
 const options = ref({
   page: 1,
@@ -71,6 +67,8 @@ const headers = [
 const fetchUsers = () => {
   userListStore.fetchUsers({
     search: searchQuery.value,
+    is_not_voted: isNotVoted.value,
+    role: role.value,
     options: options.value,
   }).then(response => {
     users.value = response?.data?.user.data
@@ -179,6 +177,8 @@ const deleteUser = () => {
   // refetch User
   fetchUsers()
 }
+
+const roleList = ['Admin', 'User', 'Semua']
 </script>
 
 <template>
@@ -192,7 +192,7 @@ const deleteUser = () => {
               <!-- 👉 Search User -->
               <VCol
                 cols="12"
-                sm="4"
+                sm="3"
               >
                 <AppTextField
                   v-model="searchQuery"
@@ -200,10 +200,23 @@ const deleteUser = () => {
                   density="compact"
                 />
               </VCol>
+              <VCol cols="3">
+                <AppSelect
+                  v-model="role"
+                  :items="roleList"
+                  placehodler="Pilih Jenis Role"
+                />
+              </VCol>
+              <VCol cols="3">
+                <VCheckbox
+                  v-model="isNotVoted"
+                  label="Hanya yang belum memilih"
+                />
+              </VCol>
               <VSpacer />
               <VCol
                 cols="12"
-                sm="4"
+                sm="3"
                 class="text-right"
               >
                 <!-- 👉 Add user button -->

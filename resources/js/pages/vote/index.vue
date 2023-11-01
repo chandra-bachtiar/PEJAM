@@ -150,32 +150,36 @@ const pilihKandidate = kandidat => {
           md="6"
           lg="4"
         >
-          <VCard class="text-center">
+          <VCard class="text-left h-100">
             <VImg
               :src="candidate.image"
               width="100%"
               style="max-height: 20rem;"
             />
-            <VCardText>
-              <h3 class="font-weight-bold text-h4">
-                {{ `${candidate.ketua} dan ${candidate.wakil}` }}
-              </h3>
-              <VDivider />
-              <p class="pt-2">
-                {{ candidate.description }}
-              </p>
-            </VCardText>
-
-            <VCardText class="justify-center">
-              <VBtn
-                variant="elevated"
-                :disabled="isAlreadyVoted"
-                @click="pilihKandidate(candidate)"
-              >
-                <span v-if="isAlreadyVoted">Anda Telah Memilih</span>
-                <span v-else>Pilih Kandidat</span>
-              </VBtn>
-            </VCardText>
+            <div class="d-flex flex-column justify-space-between">
+              <div class="text-center">
+                <VCardText class="justify-center pb-0">
+                  <VBtn
+                    variant="elevated"
+                    :disabled="isAlreadyVoted"
+                    @click="pilihKandidate(candidate)"
+                  >
+                    <span v-if="isAlreadyVoted">Anda Telah Memilih</span>
+                    <span v-else>Pilih Kandidat</span>
+                  </VBtn>
+                </VCardText>
+              </div>
+              <VCardText class="flex-grow-1">
+                <h3 class="font-weight-bold text-h4">
+                  {{ `${candidate.ketua} dan ${candidate.wakil}` }}
+                </h3>
+                <VDivider />
+                <div
+                  class="html-renderer"
+                  v-html="candidate.description"
+                />
+              </VCardText>
+            </div>
           </VCard>
         </VCol>
       </VRow>
@@ -257,6 +261,12 @@ const pilihKandidate = kandidat => {
   margin-inline: auto;
   max-inline-size: 21.875rem;
   min-inline-size: 12.5rem;
+}
+
+.html-renderer {
+  p {
+    margin-block: 0;
+  }
 }
 </style>
 

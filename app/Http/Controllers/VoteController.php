@@ -11,7 +11,14 @@ class VoteController extends Controller
 {
     public function index(): JsonResponse
     {
-        $cadidate = Vote::with('cadidate')->with('user')->paginate(10);
+        $params = request()->all();
+        $search = isset($params['search']) ? $params['search'] : '';
+        $cadidate = Vote::with(['cadidate', 'user'])->whereHas('user', function ($query) use ($search) {
+            $query->whereRaw('LOWER(nis) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(username) LIKE ?', ['%' . strtolower($search) . '%'])
+                ->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($search) . '%']);
+        })
+            ->paginate(10);
 
         return response()->json([
             'status' => 'success',

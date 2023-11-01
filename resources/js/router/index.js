@@ -10,7 +10,7 @@ import { isUserLoggedIn } from './utils'
 const path = import.meta.env.VITE_APP_ENV === 'production' ? '/' : import.meta.env.BASE_URL
 
 const router = createRouter({
-  history: createWebHistory(path),
+  history: createWebHistory('/'),
   routes: [
     ...setupLayouts(routes),
   ],

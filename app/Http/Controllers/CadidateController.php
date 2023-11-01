@@ -15,9 +15,8 @@ class CadidateController extends Controller
 
         $cadidate = Cadidate::select('id', 'ketua', 'wakil', 'image', 'description')
             ->where(function ($query) use ($search) {
-                $query->where('ketua', 'like', '%' . $search . '%')
-                    ->orWhere('wakil', 'like', '%' . $search . '%')
-                    ->orWhere('description', 'like', '%' . $search . '%');
+                $query->whereRaw('LOWER(ketua) LIKE ?', ['%' . strtolower($search) . '%'])
+                    ->orWhereRaw('LOWER(wakil) LIKE ?', ['%' . strtolower($search) . '%']);
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10);

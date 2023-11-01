@@ -17,8 +17,6 @@ const fetchData = () => {
 }
 
 fetchData()
-
-setInterval(fetchData, 30000)
 </script>
 
 <template>
@@ -66,27 +64,30 @@ setInterval(fetchData, 30000)
           md="6"
           lg="4"
         >
-          <VCard class="text-center">
+          <VCard class="text-left h-100">
             <VImg
               :src="vote.image"
               width="100%"
               style="max-height: 20rem;"
             />
-            <VCardText>
-              <h3 class="font-weight-bold text-h4">
-                {{ `${vote.ketua} dan ${vote.wakil}` }}
-              </h3>
-              <VDivider />
-              <p class="pt-2">
-                {{ vote.description }}
-              </p>
-            </VCardText>
-
-            <VCardText class="justify-center">
-              <h2 class="text-h1">
-                {{ vote.percentage }} %
-              </h2>
-            </VCardText>
+            <div class="d-flex flex-column justify-space-between">
+              <VCardText class="flex-grow-1">
+                <h3 class="font-weight-bold text-h4">
+                  {{ `${vote.ketua} dan ${vote.wakil}` }}
+                </h3>
+                <VDivider />
+                <div
+                  class="html-renderer"
+                  v-html="vote.description"
+                />
+              </VCardText>
+    
+              <VCardText class="justify-center">
+                <h2 class="text-h1 font-weight-bold">
+                  {{ parseInt(vote.percentage) }} %
+                </h2>
+              </VCardText>
+            </div>
           </VCard>
         </VCol>
       </VRow>
@@ -106,5 +107,11 @@ setInterval(fetchData, 30000)
   margin-inline: auto;
   max-inline-size: 21.875rem;
   min-inline-size: 12.5rem;
+}
+
+.html-renderer {
+  p {
+    margin-block: 0;
+  }
 }
 </style>

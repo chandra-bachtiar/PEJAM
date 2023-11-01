@@ -1,5 +1,7 @@
 <script setup>
 import { requiredValidator } from '@validators'
+import { QuillEditor } from '@vueup/vue-quill'
+import '@vueup/vue-quill/dist/vue-quill.snow.css'
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 
 const props = defineProps({
@@ -125,10 +127,19 @@ const handleDrawerModelValueUpdate = val => {
               </VCol>
 
               <!-- 👉 Deksripsi -->
-              <VCol cols="12">
-                <AppTextarea
-                  v-model="description"
-                  label="Visi & Misi"
+              <VCol
+                cols="12"
+                class="mb-14 rounded-lg"
+              >
+                <VLabel class="text-body-2 mb-2">
+                  VISI & MISI
+                </VLabel>
+                <QuillEditor
+                  v-model:content="description"
+                  theme="snow"
+                  toolbar="minimal"
+                  content-type="html"
+                  style="min-height: 50px;"
                 />
               </VCol>
 

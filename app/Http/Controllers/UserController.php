@@ -12,23 +12,48 @@ class UserController extends Controller
     {
         $params = request()->all();
         $search = isset($params['search']) ? $params['search'] : '';
-        $user = User::select('id', 'nis', 'username', 'nama', 'jenis_kelamin', 'jurusan', 'kelas', 'role', 'status', 'image')
-            ->where(function ($query) use ($search) {
-                $query->where('nis', 'like', '%' . $search . '%')
-                    ->orWhere('username', 'like', '%' . $search . '%')
-                    ->orWhere('nama', 'like', '%' . $search . '%')
-                    ->orWhere('jenis_kelamin', 'like', '%' . $search . '%')
-                    ->orWhere('jurusan', 'like', '%' . $search . '%')
-                    ->orWhere('kelas', 'like', '%' . $search . '%')
-                    ->orWhere('role', 'like', '%' . $search . '%')
-                    ->orWhere('status', 'like', '%' . $search . '%');
-            })
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-        return response()->json([
-            'status' => 'success',
-            'user' => $user
-        ]);
+        $isNotVoted = isset($params['is_not_voted']) ? $params['is_not_voted'] : false;
+        $role = isset($params['role']) ? $params['role'] : '';
+        if ($isNotVoted == "false") {
+            $user = User::with('vote')
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('LOWER(nis) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(username) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($search) . '%']);
+                })
+                ->where(function ($query) use ($role) {
+                    if ($role != '') {
+                        $roleActual = $role == 'Semua' ? '' : $role;
+                        $query->whereRaw('LOWER(role) LIKE ?', ['%' . strtolower($roleActual) . '%']);
+                    }
+                })
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ]);
+        } else {
+            $user = User::with('vote')
+                ->where(function ($query) use ($search) {
+                    $query->whereRaw('LOWER(nis) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(username) LIKE ?', ['%' . strtolower($search) . '%'])
+                        ->orWhereRaw('LOWER(nama) LIKE ?', ['%' . strtolower($search) . '%']);
+                })
+                ->where(function ($query) use ($role) {
+                    if ($role != '') {
+                        $roleActual = $role == 'Semua' ? '' : $role;
+                        $query->whereRaw('LOWER(role) LIKE ?', ['%' . strtolower($roleActual) . '%']);
+                    }
+                })
+                ->whereDoesntHave('vote')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10);
+            return response()->json([
+                'status' => 'success',
+                'user' => $user
+            ]);
+        }
     }
 
     public function show($id): JsonResponse

@@ -46,6 +46,7 @@ const headers = [
 const fetchVotes = () => {
   voteListStore.fetchVotes({
     search: searchQuery.value,
+    page: options.value.page,
     options: options.value,
   }).then(response => {
     votes.value = response?.data?.vote.data

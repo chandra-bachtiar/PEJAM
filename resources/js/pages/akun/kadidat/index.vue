@@ -65,6 +65,7 @@ const headers = [
 const fetchCadidates = () => {
   cadidateListStore.fetchCadidates({
     search: searchQuery.value,
+    page: options.value.page,
     options: options.value,
   }).then(response => {
     cadidates.value = response?.data?.cadidate.data
