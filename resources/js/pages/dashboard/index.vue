@@ -86,6 +86,9 @@ fetchData()
                 <h2 class="text-h1 font-weight-bold">
                   {{ parseInt(vote.percentage) }} %
                 </h2>
+                <h4>
+                  {{ vote.votes_count }} Suara
+                </h4>
               </VCardText>
             </div>
           </VCard>
