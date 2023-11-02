@@ -1,5 +1,6 @@
 <script setup>
 import { useVoteListStore } from '@/ListStore/useVoteListStore'
+import router from '@/router'
 import axios from '@axios'
 
 const user = JSON.parse(localStorage.getItem('userData'))
@@ -10,7 +11,6 @@ const selectedCandidate = ref(null)
 const isAlreadyVoted = ref(false)
 const isDialogFinishOpen = ref(false)
 const textLoop = ref('')
-
 const kandidat = ref([])
 
 //fetch data from api/vote
