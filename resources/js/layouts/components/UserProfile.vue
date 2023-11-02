@@ -1,4 +1,5 @@
 <script setup>
+import router from '@/router'
 import axios from '@axios'
 
 const user = ref(JSON.parse(localStorage.getItem('userData')))
