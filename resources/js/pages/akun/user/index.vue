@@ -69,6 +69,7 @@ const fetchUsers = () => {
     search: searchQuery.value,
     is_not_voted: isNotVoted.value,
     role: role.value,
+    page: options.value.page,
     options: options.value,
   }).then(response => {
     users.value = response?.data?.user.data
