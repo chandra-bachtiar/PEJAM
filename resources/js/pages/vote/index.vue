@@ -1,5 +1,6 @@
 <script setup>
 import { useVoteListStore } from '@/ListStore/useVoteListStore'
+import router from '@/router'
 import axios from '@axios'
 
 const user = JSON.parse(localStorage.getItem('userData'))
