@@ -185,7 +185,30 @@ const pilihFileCsv = () => {
 }
 
 const uploadCsv = () => {
-  console.log(csvFile.value.files[0])
+  const form = new FormData()
+
+  form.append('file', csvFile.value.files[0])
+
+  const upload = userListStore.importUser(form).then(res => {
+    fetchUsers()
+  }).catch(error => {
+    console.error(error)
+  })
+
+  toast.promise(upload, {
+    loading: 'Mengupload Data...',
+    success: 'User berhasil diupload',
+    error: 'User gagal diupload',
+  }, {
+    position: toast.POSITION.TOP_RIGHT,
+    success: {
+      icon: 'tabler-check',
+    },
+    error: {
+      icon: 'tabler-x',
+    },
+    autoClose: 1000,
+  })
 }
 
 const roleList = ['Admin', 'User', 'Semua']

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
@@ -152,6 +154,23 @@ class UserController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'User deleted successfully'
+        ]);
+    }
+
+    public function import(Request $request): JsonResponse
+    {
+        if (!$request->hasFile('file')) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'File not found'
+            ], 404);
+        }
+
+        Excel::import(new UsersImport, $request->file('file'));
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Import users successfully'
         ]);
     }
 }

@@ -48,5 +48,19 @@ export const useUserListStore = defineStore('UserListStore', {
         axios.delete(`/api/user/${id}`).then(response => resolve(response)).catch(error => reject(error))
       })
     },
+
+    // import user
+    importUser(userData) {
+      return new Promise((resolve, reject) => {
+        axios({
+          url: '/api/user/import',
+          method: 'POST',
+          data: userData,
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+          .then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
   },
 })

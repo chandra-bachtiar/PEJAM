@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'user'], function () {
     Route::post('/', [UserController::class, 'store']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
+    Route::post('/import', [UserController::class, 'import']);
 });
 
 Route::group(['middleware' => 'auth:api', 'prefix' => 'cadidate'], function () {

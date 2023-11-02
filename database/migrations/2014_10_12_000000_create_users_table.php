@@ -18,9 +18,9 @@ return new class extends Migration
             $table->string('nama');
             $table->enum('jenis_kelamin', ['L', 'P']);
             $table->string('jurusan');
-            $table->enum('kelas', ['X', 'XI', 'XII', 'XIII']);
+            $table->string('kelas')->default('X');
             $table->enum('role', ['Admin', 'User'])->default('User');
-            $table->enum('status', ['Murid', 'Guru', 'Warga Sekolah'])->default('Murid');
+            $table->string('status')->default('Murid');
             $table->string('image')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(true);
