@@ -120,7 +120,7 @@ class UserController extends Controller
         $user->kelas = $request->kelas;
         $user->role = $request->role;
         $user->status = $request->status;
-        $user->is_active = $request->is_active;
+        $user->is_active = $request->is_active == true ? 1 : 0;
 
         if ($request->hasFile('image')) {
             $imageName = time() . '.' . $request->image->extension();

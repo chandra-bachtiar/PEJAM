@@ -23,6 +23,7 @@ const updateId = ref(0)
 const deleteId = ref(0)
 const seletectedUser = ref({})
 const isNotVoted = ref(false)
+const csvFile = ref(null)
 
 const isDialogDeleteOpen = ref(false)
 
@@ -179,6 +180,14 @@ const deleteUser = () => {
   fetchUsers()
 }
 
+const pilihFileCsv = () => {
+  csvFile.value.click()
+}
+
+const uploadCsv = () => {
+  console.log(csvFile.value.files[0])
+}
+
 const roleList = ['Admin', 'User', 'Semua']
 </script>
 
@@ -201,7 +210,7 @@ const roleList = ['Admin', 'User', 'Semua']
                   density="compact"
                 />
               </VCol>
-              <VCol cols="3">
+              <VCol cols="2">
                 <AppSelect
                   v-model="role"
                   :items="roleList"
@@ -217,10 +226,24 @@ const roleList = ['Admin', 'User', 'Semua']
               <VSpacer />
               <VCol
                 cols="12"
-                sm="3"
+                sm="4"
                 class="text-right"
               >
                 <!-- 👉 Add user button -->
+                <div class="d-none">
+                  <VFileInput
+                    ref="csvFile"
+                    label="File input"
+                    @change="uploadCsv"
+                  />
+                </div>
+                <VBtn
+                  prepend-icon="tabler-file-type-csv"
+                  class="me-2"
+                  @click="pilihFileCsv"
+                >
+                  Import
+                </VBtn>
                 <VBtn
                   prepend-icon="tabler-plus"
                   @click="isAddNewUserDrawerVisible = true"

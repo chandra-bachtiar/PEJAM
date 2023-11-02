@@ -64,6 +64,15 @@ class VoteController extends Controller
             'cadidate_id' => 'required|exists:cadidates,id',
         ]);
 
+        //check if user already vote
+        $vote = Vote::where('user_id', auth()->user()->id)->first();
+        if ($vote) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Anda sudah memilih',
+            ], 400);
+        }
+
         $cadidate = Cadidate::find($request->cadidate_id);
         $cadidate->votes()->create([
             'user_id' => auth()->user()->id,

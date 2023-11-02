@@ -1,6 +1,5 @@
 <script setup>
 import { useVoteListStore } from '@/ListStore/useVoteListStore'
-import router from '@/router'
 import axios from '@axios'
 
 const user = JSON.parse(localStorage.getItem('userData'))
@@ -12,6 +11,10 @@ const isAlreadyVoted = ref(false)
 const isDialogFinishOpen = ref(false)
 const textLoop = ref('')
 const kandidat = ref([])
+
+// 👉 Toasify
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 //fetch data from api/vote
 const fetchData = () => {
@@ -63,6 +66,9 @@ const confirmVote = () => {
     fetchData()
   }).catch(error => {
     console.log(error)
+    if(error.response.status === 400) {
+      toast.error('Anda sudah memilih')
+    }
   })
 }
 
