@@ -243,6 +243,13 @@ const pilihKandidate = kandidat => {
           <p class="mb-0">
             {{ textLoop }}
           </p>
+          <VBtn
+            color="primary"
+            variant="tonal"
+            @click="logout"
+          >
+            Keluar
+          </VBtn>
         </VCardItem>
       </VCard>
     </VDialog>
