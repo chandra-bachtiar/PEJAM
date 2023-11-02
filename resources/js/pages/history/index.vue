@@ -33,6 +33,10 @@ const headers = [
     key: 'kelas',
   },
   {
+    title: 'DIPILIH',
+    key: 'dipilih',
+  },
+  {
     title: 'STATUS',
     key: 'status',
   },
@@ -125,6 +129,17 @@ watchEffect(fetchVotes)
                 <div class="d-flex flex-column">
                   <h6 class="text-base">
                     {{ item.raw.user.kelas }} - {{ item.raw.user.jurusan }}
+                  </h6>
+                </div>
+              </div>
+            </template>
+
+            <!-- 👉 Kelas -->
+            <template #item.dipilih="{ item }">
+              <div class="d-flex align-center">
+                <div class="d-flex flex-column">
+                  <h6 class="text-base">
+                    {{ item.raw.cadidate.ketua }} - {{ item.raw.cadidate.wakil }}
                   </h6>
                 </div>
               </div>
