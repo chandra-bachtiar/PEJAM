@@ -62,10 +62,10 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'vote'], function () {
     Route::post('/', [VoteController::class, 'store']);
     Route::put('/{id}', [VoteController::class, 'update']);
     Route::delete('/{id}', [VoteController::class, 'destroy']);
-    Route::get('/export', [VoteController::class, 'export']);
 });
 
 Route::get('/publicvote', [VoteController::class, 'publicVote']);
+Route::get('/vote/export', [VoteController::class, 'export']);
 
 Route::post('/test', function (Request $request) {
     return response()->json(['foo' => 'bar']);
