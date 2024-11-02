@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth:api', 'prefix' => 'vote'], function () {
 });
 
 Route::get('/publicvote', [VoteController::class, 'publicVote']);
-Route::get('/vote/export', [VoteController::class, 'export']);
+Route::get('/export', [VoteController::class, 'export']);
 
 Route::post('/test', function (Request $request) {
     return response()->json(['foo' => 'bar']);

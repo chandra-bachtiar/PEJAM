@@ -62,7 +62,7 @@ const fetchVotes = () => {
 }
 
 const exportData = isEncrypted => {
-  const url = isEncrypted ? '/api/vote/export?encrypt=true' : '/api/vote/export'
+  const url = isEncrypted ? '/api/export?encrypt=true' : '/api/export'
 
   window.open(url, '_blank')
 }
