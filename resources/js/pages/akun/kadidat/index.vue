@@ -414,8 +414,8 @@ const openVisiMisi = description => {
 
 <style lang="scss">
 .links {
-  cursor: pointer;
   color: blue;
+  cursor: pointer;
 }
 
 .app-user-search-filter {

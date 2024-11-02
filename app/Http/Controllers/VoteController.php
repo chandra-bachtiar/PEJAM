@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Vote;
 use App\Models\Cadidate;
+use App\Exports\VoteExport;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Exp;
 
 class VoteController extends Controller
 {
@@ -152,5 +155,13 @@ class VoteController extends Controller
             'status' => 'success',
             'message' => 'Cadidate deleted',
         ]);
+    }
+
+    public function export()
+    {
+        //get from query param
+        $encrypt = request()->get('encrypt') == 'true' ? true : false;
+
+        return Excel::download(new VoteExport($encrypt), 'vote.xlsx');
     }
 }

@@ -61,6 +61,11 @@ const fetchVotes = () => {
   })
 }
 
+const exportData = isEncrypted => {
+  url = isEncrypted ? '/api/vote/export?encrypt=true' : '/api/vote/export'
+  window.open(url, '_blank')
+}
+
 watchEffect(fetchVotes)
 </script>
 
@@ -82,6 +87,27 @@ watchEffect(fetchVotes)
                   placeholder="Search"
                   density="compact"
                 />
+              </VCol>
+              <VSpacer />
+              <VCol
+                cols="12"
+                sm="4"
+                class="text-right"
+              >
+                <!-- 👉 Add cadidate button -->
+                <VBtn
+                  prepend-icon="tabler-file-export"
+                  @click="exportData(false)"
+                >
+                  Export
+                </VBtn>
+                <VBtn
+                  prepend-icon="tabler-file-export"
+                  class="ms-3"
+                  @click="exportData(true)"
+                >
+                  Export Encrypted
+                </VBtn>
               </VCol>
             </VRow>
           </VCardText>
