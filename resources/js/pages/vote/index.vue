@@ -9,6 +9,7 @@ const isDialogOpen = ref(false)
 const textConfirmation = ref('')
 const selectedCandidate = ref(null)
 const isAlreadyVoted = ref(false)
+const isLoading = ref(false)
 const isDialogFinishOpen = ref(false)
 const textLoop = ref('')
 const kandidat = ref([])
@@ -44,6 +45,7 @@ const checkVoted = () => {
 watchEffect(checkVoted)
 
 const confirmVote = () => {
+  isLoading.value = true
   voteListStore.addVote({
     cadidate_id: selectedCandidate.value.id,
   }).then(response => {
@@ -169,6 +171,7 @@ const pilihKandidate = kandidat => {
                   <VBtn
                     variant="elevated"
                     :disabled="isAlreadyVoted"
+                    :loading="isLoading"
                     @click="pilihKandidate(candidate)"
                   >
                     <span v-if="isAlreadyVoted">Anda Telah Memilih</span>
