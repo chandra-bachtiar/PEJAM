@@ -27,10 +27,9 @@ class VoteExport implements FromCollection
             $data[$key]['nis'] = $this->encrypt ? encrypt($value->user->nis) : $value->user->nis;
             $data[$key]['kelas'] = $value->user->kelas;
             $data[$key]['jurusan'] = $value->user->jurusan;
-            $data[$key]['vote'] = $value->cadidate->ketua . ' - ' . $value->cadidate->wakil;
+            $data[$key]['vote'] = "Testing Vote";
             $data[$key]['status'] = $value->user->status;
             $data[$key]['waktu_vote'] = $value->created_at;
-            dd($data);
         }
 
         return collect($data);
