@@ -30,6 +30,7 @@ class VoteExport implements FromCollection
             $data[$key]['vote'] = $value->cadidate->ketua . ' - ' . $value->cadidate->wakil;
             $data[$key]['status'] = $value->user->status;
             $data[$key]['waktu_vote'] = $value->created_at;
+            dd($data);
         }
 
         return collect($data);
