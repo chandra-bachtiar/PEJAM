@@ -171,7 +171,6 @@ const pilihKandidate = kandidat => {
                   <VBtn
                     variant="elevated"
                     :disabled="isAlreadyVoted"
-                    :loading="isLoading"
                     @click="pilihKandidate(candidate)"
                   >
                     <span v-if="isAlreadyVoted">Anda Telah Memilih</span>
@@ -222,6 +221,7 @@ const pilihKandidate = kandidat => {
             >
               <VBtn
                 class="me-3"
+                :loading="isLoading"
                 @click="confirmVote"
               >
                 Yakin
