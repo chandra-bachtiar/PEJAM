@@ -118,19 +118,19 @@ const pilihKandidate = kandidat => {
     <div>
       <!-- 👉 Title and subtitle -->
       <VImg
-        src="/storage/logo/voting.png"
+        src="/logo.png"
         alt="image voting"
         width="100"
         height="100"
-        style="float: left;"
+        style="float: inline-start;"
         class=""
       />
       <VImg
-        src="/storage/logo/osis.png"
+        src="/osis.png"
         alt="image osis"
         width="100"
         height="100"
-        style="float: right;"
+        style="float: inline-end;"
         class=""
       />
       <div class="text-center mb-4 mx-10">
@@ -144,7 +144,7 @@ const pilihKandidate = kandidat => {
     <!-- 👉 Image -->
     <div
       class="misc-avatar w-100 mt-10"
-      style="padding-left: 10rem; padding-right: 10rem;"
+      style=" padding-right: 10rem;padding-left: 10rem;"
     >
       <VRow
         align-content="center"
@@ -267,8 +267,8 @@ const pilihKandidate = kandidat => {
 @use "@core-scss/template/pages/misc.scss";
 
 .links {
+  color: blue;
   cursor: pointer;
-  color: blue
 }
 
 .misc-email-input {

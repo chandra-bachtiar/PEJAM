@@ -87,7 +87,7 @@ const handleNavScroll = evt => {
           class="app-logo d-flex align-center gap-x-3 app-title-wrapper"
         >
           <VImg
-            src="/storage/logo/voting.png"
+            src="/logo.png"
             alt="image voting"
             width="30"
             height="30"

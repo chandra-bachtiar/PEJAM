@@ -62,7 +62,7 @@ const login = () => {
           <div>
             <div class="d-flex">
               <VImg
-                src="/storage/logo/voting.png"
+                src="/logo.png"
                 alt="image voting"
                 width="70"
                 height="70"
